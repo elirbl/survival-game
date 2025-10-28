@@ -29,7 +29,7 @@ class ActionManager:
         }
     
     def fish(self, player, event_manager=None):
-        """Fishing: reduces hunger but consumes energy."""
+        """Fishing: increases hunger gauge (fills you up) but consumes energy."""
         print("\n🎣 You try to fish...")
         
         if player.energy < 15:
@@ -42,14 +42,14 @@ class ActionManager:
         if random.random() > 0.3:  # 70% success
             fish = random.randint(20, 35)
             player.eat(fish)
-            print(f"✅ You catch a fish! (-{fish} hunger)")
+            print(f"✅ You catch a fish! (+{fish} hunger)")
         else:
             print("❌ No catch today. You spent energy.")
         
         print(f"⚡ Energy consumed: -15")
     
     def search_water(self, player, event_manager=None):
-        """Search for water: reduces thirst, consumes energy."""
+        """Search for water: increases thirst gauge (hydrates you), consumes energy."""
         print("\n💧 You search for water...")
         
         if player.energy < 10:
@@ -62,25 +62,25 @@ class ActionManager:
         if random.random() > 0.2:  # 80% success
             water = random.randint(25, 40)
             player.drink(water)
-            print(f"✅ You find water! (-{water} thirst)")
+            print(f"✅ You find water! (+{water} thirst)")
         else:
             print("❌ No water source found. You spent energy.")
         
         print(f"⚡ Energy consumed: -10")
     
     def sleep(self, player, event_manager=None):
-        """Sleep: restores energy but increases hunger and thirst."""
+        """Sleep: restores energy but decreases hunger and thirst (you get hungry/thirsty)."""
         print("\n😴 You settle down to sleep...")
         
         energy_recovered = 50
         player.rest(energy_recovered)
         
-        # Sleeping increases hunger and thirst
-        player.hunger = min(100, player.hunger + 15)
-        player.thirst = min(100, player.thirst + 20)
+        # Sleeping makes you hungry and thirsty (gauges decrease)
+        player.hunger = max(0, player.hunger - 15)
+        player.thirst = max(0, player.thirst - 20)
         
         print(f"✅ You rest well. (+{energy_recovered} energy)")
-        print(f"⚠️  While sleeping: +15 hunger, +20 thirst")
+        print(f"⚠️  While sleeping: -15 hunger, -20 thirst")
     
     def explore(self, player, event_manager):
         """Explore: triggers a random event (beneficial or dangerous)."""
