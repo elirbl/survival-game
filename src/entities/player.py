@@ -6,14 +6,14 @@ class Player:
     Represents the player with vital gauges.
     
     Gauges:
-    - Hunger: 0 (full) -> 100 (starving) -> game over
-    - Thirst: 0 (hydrated) -> 100 (dehydrated) -> game over
+    - Hunger: 100 (full) -> 0 (starving) -> game over
+    - Thirst: 100 (hydrated) -> 0 (dehydrated) -> game over
     - Energy: 100 (rested) -> 0 (exhausted) -> game over
     """
     
     # Critical thresholds for game over
-    MAX_HUNGER = 100
-    MAX_THIRST = 100
+    MIN_HUNGER = 0
+    MIN_THIRST = 0
     MIN_ENERGY = 0
     
     def __init__(self, name="Adventurer"):
@@ -21,32 +21,32 @@ class Player:
         self.day = 1
         
         # Vital gauges (as per specifications)
-        self.hunger = 30      # 0 = full, 100 = starving
-        self.thirst = 30      # 0 = hydrated, 100 = dehydrated
+        self.hunger = 70      # 100 = full, 0 = starving
+        self.thirst = 70      # 100 = hydrated, 0 = dehydrated
         self.energy = 100     # 100 = rested, 0 = exhausted
     
     def is_alive(self):
         """Check if the player is still alive"""
-        return (self.hunger < self.MAX_HUNGER and 
-                self.thirst < self.MAX_THIRST and 
+        return (self.hunger > self.MIN_HUNGER and 
+                self.thirst > self.MIN_THIRST and 
                 self.energy > self.MIN_ENERGY)
     
     def natural_evolution(self):
         """
         Natural evolution of gauges each day.
-        Hunger and thirst increase, energy slightly decreases.
+        All gauges decrease naturally over time.
         """
-        self.hunger = min(100, self.hunger + 10)
-        self.thirst = min(100, self.thirst + 15)
+        self.hunger = max(0, self.hunger - 10)
+        self.thirst = max(0, self.thirst - 15)
         self.energy = max(0, self.energy - 5)
     
     def eat(self, amount):
-        """Decrease hunger (0 = full)"""
-        self.hunger = max(0, self.hunger - amount)
+        """Increase fullness (100 = full)"""
+        self.hunger = min(100, self.hunger + amount)
     
     def drink(self, amount):
-        """Decrease thirst (0 = hydrated)"""
-        self.thirst = max(0, self.thirst - amount)
+        """Increase hydration (100 = hydrated)"""
+        self.thirst = min(100, self.thirst + amount)
     
     def rest(self, amount):
         """Increase energy"""
@@ -74,15 +74,15 @@ class Player:
         """Load a saved state"""
         self.name = state.get("name", self.name)
         self.day = state.get("day", 1)
-        self.hunger = state.get("hunger", 30)
-        self.thirst = state.get("thirst", 30)
+        self.hunger = state.get("hunger", 70)
+        self.thirst = state.get("thirst", 70)
         self.energy = state.get("energy", 100)
     
     def get_death_cause(self):
         """Return the cause of death"""
-        if self.hunger >= self.MAX_HUNGER:
+        if self.hunger >= self.MIN_HUNGER:
             return "Died of starvation..."
-        elif self.thirst >= self.MAX_THIRST:
+        elif self.thirst >= self.MIN_THIRST:
             return "Died of dehydration..."
         elif self.energy <= self.MIN_ENERGY:
             return "Died of exhaustion..."
