@@ -80,9 +80,9 @@ class Player:
     
     def get_death_cause(self):
         """Return the cause of death"""
-        if self.hunger >= self.MIN_HUNGER:
+        if self.hunger <= self.MIN_HUNGER:
             return "Died of starvation..."
-        elif self.thirst >= self.MIN_THIRST:
+        elif self.thirst <= self.MIN_THIRST:
             return "Died of dehydration..."
         elif self.energy <= self.MIN_ENERGY:
             return "Died of exhaustion..."
