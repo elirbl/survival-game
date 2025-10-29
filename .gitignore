@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+
+# Build / Distribution / Reports
+build/
+dist/
+.pytest_cache/
+.coverage*
+htmlcov/
+
+# Linters / Type checkers
+.mypy_cache/
+.ruff_cache/
+
+# Sauvegardes du jeu
+# Ignore tout le dossier des sauvegardes
+saves/
+*.sav
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
